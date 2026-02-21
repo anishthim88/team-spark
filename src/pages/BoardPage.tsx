@@ -13,8 +13,9 @@ const BoardPage = () => {
 
   return (
     <div className="relative flex min-h-screen flex-col bg-background">
-      {/* Subtle background texture */}
-      <div className="fixed inset-0 bg-dot-pattern opacity-30 pointer-events-none" />
+      {/* Soft gradient background */}
+      <div className="fixed inset-0 pointer-events-none" style={{ background: 'linear-gradient(135deg, hsl(350 89% 60% / 0.04) 0%, hsl(245 72% 59% / 0.05) 35%, hsl(199 89% 48% / 0.04) 65%, hsl(152 76% 44% / 0.04) 100%)' }} />
+      <div className="fixed inset-0 bg-dot-pattern opacity-20 pointer-events-none" />
 
       {/* Join Modal */}
       {!currentUser && (
