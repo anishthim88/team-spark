@@ -5,9 +5,10 @@ import RetroCard from '@/components/RetroCard';
 
 interface RetroColumnProps {
   type: ColumnType;
+  index: number;
 }
 
-const RetroColumn = ({ type }: RetroColumnProps) => {
+const RetroColumn = ({ type, index }: RetroColumnProps) => {
   const config = COLUMN_CONFIG[type];
   const { cards, addCard } = useRetro();
   const columnCards = cards.filter(c => c.column === type);
@@ -25,24 +26,36 @@ const RetroColumn = ({ type }: RetroColumnProps) => {
   };
 
   return (
-    <div className="flex flex-col rounded-xl border border-border bg-card">
+    <div
+      className="flex flex-col rounded-2xl border border-border/50 bg-card shadow-column overflow-hidden animate-fade-in"
+      style={{ animationDelay: `${index * 100}ms` }}
+    >
       {/* Header */}
-      <div className={`flex items-center justify-between border-l-4 ${config.borderClass} rounded-t-xl px-4 py-3 ${config.bgClass}`}>
-        <div className="flex items-center gap-2">
-          <span className="text-lg">{config.emoji}</span>
-          <h3 className={`text-sm font-semibold ${config.colorClass}`}>{config.label}</h3>
+      <div className={`relative flex items-center justify-between px-4 py-3.5 ${config.gradientClass}`}>
+        {/* Left color stripe */}
+        <div
+          className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full"
+          style={{ backgroundColor: config.dotColor }}
+        />
+        <div className="flex items-center gap-2.5 pl-2">
+          <span className="text-xl">{config.emoji}</span>
+          <h3 className={`text-sm font-bold ${config.colorClass}`}>{config.label}</h3>
         </div>
-        <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${config.badgeClass}`}>
+        <span
+          className="flex h-6 min-w-[24px] items-center justify-center rounded-full px-1.5 text-[11px] font-bold"
+          style={{ backgroundColor: `${config.dotColor}18`, color: config.dotColor }}
+        >
           {columnCards.length}
         </span>
       </div>
 
       {/* Cards */}
-      <div className="flex-1 space-y-3 overflow-y-auto p-3" style={{ maxHeight: 'calc(100vh - 220px)' }}>
+      <div className="flex-1 space-y-2.5 overflow-y-auto p-3 custom-scrollbar" style={{ maxHeight: 'calc(100vh - 240px)' }}>
         {columnCards.length === 0 && !isAdding && (
-          <div className="flex flex-col items-center justify-center py-10 text-center">
-            <span className="text-3xl">{config.emoji}</span>
-            <p className="mt-2 text-xs text-muted-foreground">Nothing here yet — add the first card!</p>
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <span className="mb-3 text-4xl opacity-40">{config.emoji}</span>
+            <p className="text-xs text-muted-foreground/70">Nothing here yet</p>
+            <p className="text-xs text-muted-foreground/50">Add the first card!</p>
           </div>
         )}
         {columnCards.map(card => (
@@ -51,16 +64,16 @@ const RetroColumn = ({ type }: RetroColumnProps) => {
       </div>
 
       {/* Add card */}
-      <div className="border-t border-border p-3">
+      <div className="border-t border-border/40 p-3">
         {isAdding ? (
-          <div className="animate-slide-up space-y-2">
+          <div className="animate-scale-in space-y-2.5">
             <textarea
               value={content}
               onChange={e => setContent(e.target.value)}
               placeholder="What's on your mind?"
               autoFocus
               rows={3}
-              className="w-full resize-none rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-shadow"
+              className="w-full resize-none rounded-xl border border-input/70 bg-background/60 px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40 transition-all backdrop-blur-sm"
             />
             {type === 'action' && (
               <input
@@ -68,20 +81,20 @@ const RetroColumn = ({ type }: RetroColumnProps) => {
                 value={owner}
                 onChange={e => setOwner(e.target.value)}
                 placeholder="Owner (optional)"
-                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-shadow"
+                className="w-full rounded-xl border border-input/70 bg-background/60 px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40 transition-all backdrop-blur-sm"
               />
             )}
             <div className="flex gap-2">
               <button
                 onClick={handleSubmit}
                 disabled={!content.trim()}
-                className="flex-1 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground press-scale hover:opacity-90 transition-opacity disabled:opacity-50"
+                className="flex-1 rounded-xl gradient-primary px-3 py-2.5 text-xs font-semibold text-primary-foreground press-scale hover:opacity-90 transition-all disabled:opacity-40"
               >
-                Add
+                Add Card
               </button>
               <button
                 onClick={() => { setIsAdding(false); setContent(''); setOwner(''); }}
-                className="rounded-lg border border-border px-3 py-2 text-xs font-medium text-muted-foreground hover:bg-accent transition-colors press-scale"
+                className="rounded-xl border border-border/60 px-3 py-2.5 text-xs font-medium text-muted-foreground hover:bg-accent transition-all press-scale"
               >
                 Cancel
               </button>
@@ -90,9 +103,10 @@ const RetroColumn = ({ type }: RetroColumnProps) => {
         ) : (
           <button
             onClick={() => setIsAdding(true)}
-            className="w-full rounded-lg border border-dashed border-border py-2 text-xs font-medium text-muted-foreground transition-colors hover:border-primary hover:text-primary press-scale"
+            className="group w-full rounded-xl border border-dashed border-border/60 py-2.5 text-xs font-medium text-muted-foreground transition-all duration-300 hover:border-primary/40 hover:text-primary hover:bg-primary/5 press-scale"
           >
-            + Add card
+            <span className="mr-1 inline-block transition-transform duration-300 group-hover:scale-110">+</span>
+            Add card
           </button>
         )}
       </div>
