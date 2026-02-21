@@ -14,11 +14,9 @@ const HomePage = () => {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background">
-      {/* Decorative background */}
-      <div className="absolute inset-0 bg-dot-pattern opacity-60" />
-      <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
-      <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-col-glad/8 blur-3xl" />
-      <div className="absolute top-1/3 left-1/4 h-64 w-64 rounded-full bg-col-sad/5 blur-3xl" />
+      {/* Soft gradient background matching board */}
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, hsl(350 89% 60% / 0.04) 0%, hsl(245 72% 59% / 0.06) 35%, hsl(199 89% 48% / 0.04) 65%, hsl(152 76% 44% / 0.04) 100%)' }} />
+      <div className="absolute inset-0 bg-dot-pattern opacity-30" />
 
       <div className="relative z-10 w-full max-w-md px-4 animate-fade-in">
         <div className="rounded-2xl border border-border/60 bg-card/80 p-10 shadow-column backdrop-blur-xl">
