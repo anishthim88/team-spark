@@ -12,27 +12,33 @@ const BoardPage = () => {
   const [showJoin, setShowJoin] = useState(true);
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <div className="relative flex min-h-screen flex-col bg-background">
+      {/* Subtle background texture */}
+      <div className="fixed inset-0 bg-dot-pattern opacity-30 pointer-events-none" />
+
       {/* Join Modal */}
       {!currentUser && (
         <JoinModal open={showJoin} onJoined={() => setShowJoin(false)} />
       )}
 
       {/* Navbar */}
-      <header className="sticky top-0 z-40 border-b border-border bg-card/80 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-border/40 bg-card/70 shadow-navbar backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
           <div className="flex items-center gap-3">
-            <span className="text-lg font-bold text-foreground">{title || 'Untitled Retro'}</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-primary text-sm">
+              📋
+            </div>
+            <span className="text-base font-bold text-foreground tracking-tight">{title || 'Untitled Retro'}</span>
           </div>
           <ParticipantBar />
         </div>
       </header>
 
       {/* Board */}
-      <main className="mx-auto w-full max-w-7xl flex-1 p-6">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {COLUMNS.map(col => (
-            <RetroColumn key={col} type={col} />
+      <main className="relative z-10 mx-auto w-full max-w-7xl flex-1 p-6">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {COLUMNS.map((col, i) => (
+            <RetroColumn key={col} type={col} index={i} />
           ))}
         </div>
       </main>
